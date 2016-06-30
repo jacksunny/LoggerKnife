@@ -79,8 +79,8 @@ L.i(String tagName,Object object);
  
 # 参考
  
-[设置Android Studio log颜色部分参考《Android专用Log开源项目——KLog》](http://blog.csdn.net/zhaokaiqiang1992/article/details/49837627)
-[Android的LogCat的使用，调试规范Log](http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2012/1019/445.html)
+* [设置Android Studio log颜色部分参考《Android专用Log开源项目——KLog》](http://blog.csdn.net/zhaokaiqiang1992/article/details/49837627)
+* [Android的LogCat的使用，调试规范Log](http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2012/1019/445.html)
  
 # FAQ
 1. 引入后出现错误
