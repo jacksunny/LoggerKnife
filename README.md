@@ -23,7 +23,10 @@
 ### 1.引入
 
 Android Studio 同学推荐B方案
+
 Eclipse 同学 最快的方式为 下载源码（两个文件）
+
+（！如出现错误请参照本文FAQ）
 
 A. Maven
  
@@ -77,6 +80,17 @@ L.i(String tagName,Object object);
 # 参考
  
 [设置Android Studio log颜色部分参考《Android专用Log开源项目——KLog》](http://blog.csdn.net/zhaokaiqiang1992/article/details/49837627)
+[Android的LogCat的使用，调试规范Log](http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2012/1019/445.html)
  
+# FAQ
+1. 引入后出现错误
+   “Suggestion: add 'tools:replace="theme"' to <application> element at AndroidManifest.xml:29:5 to override” 等
+   解决方案：在最外层AndroidManifest.xml ，application标签中加入以下即可
+```java
+// 如果提示 icon等同理
+tools:replace="theme"
+```
+
+
 # 备注
 所有源码均未参考其他类似工具（如kLog等），只有部分参考输出格式，同学们可放心使用
