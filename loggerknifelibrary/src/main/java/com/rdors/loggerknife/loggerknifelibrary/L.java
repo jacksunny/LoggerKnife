@@ -15,7 +15,7 @@ public class L {
     /**
      * 日志级别
      */
-    private static LogLevel logLevel = LogLevel.Verbose;
+    private static LogLevel logLevel = LogLevel.All;
     private static String TAG = "";
     /**
      * 空格（表示缩进）
@@ -33,7 +33,7 @@ public class L {
     /**
      * 竖直分隔符
      */
-    private static final String SEPARATOR_VERTICAL = "| ";
+    private static final String SEPARATOR_VERTICAL = "";
     /**
      * 默认回车之后加上竖直分隔符
      */
@@ -43,6 +43,22 @@ public class L {
      * 每3000个字符就切割（建议在 3000左右，实测 3705字符之后的字符无法显示）
      */
     private static final int MAX_PRINT_LENGTH = 3000;
+
+    public enum LogLevel {
+        All(-1), Verbose(0), Debug(1), Info(2), Warn(3), Error(4), None(100);
+        private final int mIndex;
+
+        private LogLevel(int index) {
+            mIndex = index;
+        }
+
+        /**
+         * @return 得到先后顺序
+         */
+        public int getIndex() {
+            return mIndex;
+        }
+    }
 
     /**
      * 初始化
@@ -63,7 +79,7 @@ public class L {
      * @param logLevel 输出等级
      * @param object   输出内容
      */
-    private static void logAll(LogLevel logLevel, Object object) {
+    private static void logAll(String tagName, LogLevel logLevel, Object object, Throwable tr) {
         if (object == null) {
             return;
         }
@@ -92,29 +108,44 @@ public class L {
             }
             items[i] = content.substring(i * MAX_PRINT_LENGTH, topIndex);
         }
-        LogAllItems(logLevel, items);
+        LogAllItems(tagName, logLevel, items, tr);
     }
 
-    private static final void LogAllItems(LogLevel logLevel, String[] items) {
+    /**
+     * 根据切割的字符串数组输出超长 log
+     *
+     * @param tagName  如果不为空，以该tagName 为 TAG
+     * @param logLevel 输出控制级别
+     * @param items    切割的字符串数组
+     */
+    private static void LogAllItems(String tagName, LogLevel logLevel, String[] items, Throwable tr) {
         if (items == null || items.length == 0) {
             return;
         }
+        String thisTag = TAG;
+        if (!TextUtils.isEmpty(tagName)) {
+            thisTag = tagName;
+        }
         for (String item : items) {
             switch (logLevel) {
+                case All:
                 case Verbose:
-                    Log.v(TAG, item);
+                    Log.v(thisTag, item, tr);
                     break;
                 case Debug:
-                    Log.d(TAG, item);
+                    Log.d(thisTag, item, tr);
                     break;
                 case Info:
-                    Log.i(TAG, item);
+                    Log.i(thisTag, item, tr);
                     break;
                 case Warn:
-                    Log.w(TAG, item);
+                    Log.w(thisTag, item, tr);
                     break;
                 case Error:
-                    Log.e(TAG, item);
+                    Log.e(thisTag, item, tr);
+                    break;
+                case None:
+                default:
                     break;
             }
         }
@@ -122,37 +153,148 @@ public class L {
 
     /**
      * 日志输出级别：V
+     *
+     * @param object 输出对象
      */
     public static void v(Object object) {
-        logAll(LogLevel.Verbose, object);
+        v(null, object, null);
+    }
+
+    /**
+     * 日志输出级别：V
+     *
+     * @param tagName tag 名称，以该名称为 TAG
+     * @param object  输出对象
+     */
+    public static void v(String tagName, Object object) {
+        v(tagName, object, null);
+    }
+
+    /**
+     * 日志输出级别：V
+     *
+     * @param tr      An exception to log
+     * @param tagName tag 名称，以该名称为 TAG
+     * @param object  输出对象
+     */
+    public static void v(String tagName, Object object, Throwable tr) {
+        logAll(tagName, LogLevel.Verbose, object, tr);
     }
 
     /**
      * 日志输出级别：D
+     *
+     * @param object 输出对象
      */
     public static void d(Object object) {
-        logAll(LogLevel.Debug, object);
+        d(null, object, null);
+    }
+
+    /**
+     * 日志输出级别：D
+     *
+     * @param tagName tag 名称，以该名称为 TAG
+     * @param object  输出对象
+     */
+    public static void d(String tagName, Object object) {
+        d(tagName, object, null);
+    }
+
+    /**
+     * 日志输出级别：D
+     *
+     * @param tagName tag 名称，以该名称为 TAG
+     * @param object  输出对象
+     */
+    public static void d(String tagName, Object object, Throwable tr) {
+        logAll(tagName, LogLevel.Debug, object, tr);
     }
 
     /**
      * 日志输出级别：I
+     *
+     * @param object 输出对象
      */
     public static void i(Object object) {
-        logAll(LogLevel.Info, object);
+        i(null, object, null);
+    }
+
+    /**
+     * 日志输出级别：I
+     *
+     * @param tagName tag 名称，以该名称为 TAG
+     * @param object  输出对象
+     */
+    public static void i(String tagName, Object object) {
+        i(tagName, object, null);
+    }
+
+    /**
+     * 日志输出级别：I
+     *
+     * @param tagName tag 名称，以该名称为 TAG
+     * @param object  输出对象
+     */
+    public static void i(String tagName, Object object, Throwable tr) {
+        logAll(tagName, LogLevel.Info, object, tr);
     }
 
     /**
      * 日志输出级别：W
+     *
+     * @param object 输出对象
      */
     public static void w(Object object) {
-        logAll(LogLevel.Warn, object);
+        w(null, object, null);
+    }
+
+    /**
+     * 日志输出级别：W
+     *
+     * @param tagName tag 名称，以该名称为 TAG
+     * @param object  输出对象
+     */
+    public static void w(String tagName, Object object) {
+        w(tagName, object, null);
+    }
+
+    /**
+     * 日志输出级别：W
+     *
+     * @param tagName tag 名称，以该名称为 TAG
+     * @param object  输出对象
+     */
+    public static void w(String tagName, Object object, Throwable tr) {
+        logAll(tagName, LogLevel.Warn, object, tr);
     }
 
     /**
      * 日志输出级别：E
+     *
+     * @param object 输出对象
      */
     public static void e(Object object) {
-        logAll(LogLevel.Error, object);
+        e(null, object, null);
+    }
+
+    /**
+     * 日志输出级别：E
+     *
+     * @param tagName tag 名称，以该名称为 TAG
+     * @param object  输出对象
+     */
+    public static void e(String tagName, Object object) {
+        e(tagName, object, null);
+    }
+
+    /**
+     * 日志输出级别：E
+     *
+     * @param tagName tag 名称，以该名称为 TAG
+     * @param object  输出对象
+     */
+    public static void e(String tagName, Object object, Throwable tr) {
+        logAll(tagName, LogLevel.Error, object, tr);
     }
 
     /**
@@ -162,15 +304,12 @@ public class L {
      * @return 和当前输出级别对比，如果在之后，就能输出
      */
     private static boolean isCurrentTypeCanLogOut(LogLevel ll) {
-        if (ll.getIndex() >= logLevel.getIndex()) {
-            return true;
-        }
-        return false;
+        return ll.getIndex() >= logLevel.getIndex();
     }
 
 
     /**
-     * @param object
+     * @param object 输出的对象
      * @return 打印出特定格式 ，根据类型 object
      */
     private static String getContentStringWithAllType(Object object) {
@@ -201,10 +340,7 @@ public class L {
         if (object == null) {
             return null;
         }
-        String content = null;
-        if (object instanceof JSONObject) {
-            content = ((JSONObject) object).toString();
-        }
+        String content = object.toString();
         if (TextUtils.isEmpty(content)) {
             return null;
         }
@@ -221,27 +357,46 @@ public class L {
             return null;
         }
         final int length = object.length();
-        int space_count = 0;
+        int spaceCount = 0;
         StringBuffer sb = new StringBuffer();
+        // 是否检测到逗号需要换行
+        boolean isCommaChangeLine = false;
         for (int i = 0; i < length; i++) {
             char charI = object.charAt(i);
             String string = String.valueOf(charI);
 
             // 按照 json 格式过滤处理 string
             if (string.equals("{")) {
-                space_count++;
-                sb.append("{" + STYLE_ENTER + getSpaceStringWithCount(space_count));
+                spaceCount++;
+                sb.append("{");
+                sb.append(STYLE_ENTER);
+                sb.append(getSpaceStringWithCount(spaceCount));
+                isCommaChangeLine = true;
             } else if ("[".equals(string)) {
-                space_count++;
-                sb.append("[" + STYLE_ENTER + getSpaceStringWithCount(space_count));
+                spaceCount++;
+                sb.append("[");
+                sb.append(STYLE_ENTER);
+                sb.append(getSpaceStringWithCount(spaceCount));
+                isCommaChangeLine = true;
             } else if (",".equals(string)) {
-                sb.append("," + STYLE_ENTER + getSpaceStringWithCount(space_count));
+                sb.append(",");
+                if (isCommaChangeLine) {
+                    sb.append(STYLE_ENTER);
+                    sb.append(getSpaceStringWithCount(spaceCount));
+                }
             } else if ("}".equals(string)) {
-                space_count--;
-                sb.append("" + STYLE_ENTER + getSpaceStringWithCount(space_count) + "}");
+                spaceCount--;
+                sb.append(STYLE_ENTER);
+                sb.append(getSpaceStringWithCount(spaceCount));
+                sb.append("}");
             } else if ("]".equals(string)) {
-                space_count--;
-                sb.append("" + STYLE_ENTER + getSpaceStringWithCount(space_count) + "]");
+                spaceCount--;
+                sb.append(STYLE_ENTER);
+                sb.append(getSpaceStringWithCount(spaceCount));
+                sb.append("]");
+            } else if ("\"".equals(string)) {
+                isCommaChangeLine = !isCommaChangeLine;
+                sb.append("\"");
             } else {
                 sb.append(string);
             }
