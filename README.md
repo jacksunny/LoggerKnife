@@ -14,7 +14,7 @@
 # 输出样式
  
 1. json
-![](http://7xpc6d.com1.z0.glb.clouddn.com/88D9F163-D5AD-4248-AA70-6A7AD965442F.png)
+![](http://7xpc6d.com1.z0.glb.clouddn.com/1.1version.png)
 2. 其他
    不举例
  
@@ -91,6 +91,16 @@ L.i(String tagName,Object object);
 tools:replace="theme"
 ```
 
+# 版本更新说明
+1.0
+1. 输出格式化的json
+2. 用 “==”作为横向隔离
+3. 用“|”作为纵向隔离
+4. 可以在 AndroidStudio中直接点击调用来源
+
+1.1
+1. 删除 “|”纵向隔离，使可以直接拷贝格式化输出的json
+2. 为 逗号做了处理，如果判断为一个语句中的，则不换行，在输出json时更精确
 
 # 备注
 所有源码均未参考其他类似工具（如kLog等），只有部分参考输出格式，同学们可放心使用
